@@ -178,7 +178,7 @@ const FacturaList = () => {
 
     return (
         <div>
-            <h1>Lista de Facturas</h1>
+            <h1 className='patito font-patito '>Lista de Facturas</h1>
             {mensaje && <p>{mensaje}</p>}
             <ul>
                 {facturas.map((factura, index) => (
