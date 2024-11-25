@@ -4,11 +4,11 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import * as pdfjsLib from 'pdfjs-dist/build/pdf';
-import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
+
+// Configurar el *worker* para pdf.js
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.15.349/pdf.worker.min.js';
 
 import FacturaService from '../services/FacturaService';
-
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 const FacturaList = () => {
     const [facturas, setFacturas] = useState([]);

@@ -5,6 +5,7 @@ import Contador from "./pages/contador";
 import Dashboard from "./pages/Dashboard";
 import FacturaForm from "./pages/FacturaForm";
 import FacturaList from "./pages/FacturaList";
+
 function App() {
   return (
     <Router>
