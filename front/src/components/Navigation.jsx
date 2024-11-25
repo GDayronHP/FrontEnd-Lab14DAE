@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const Navigation = ({ items }) => {
   return (
@@ -9,7 +11,9 @@ const Navigation = ({ items }) => {
             key={index}
             className="text-slate-400  hover:text-white font-medium cursor-pointer"
           >
-            {item}
+            <Link to={item.path} className="block px-4 py-2">
+              {item.name}
+            </Link>
           </li>
         ))}
       </ul>
@@ -17,8 +21,16 @@ const Navigation = ({ items }) => {
         <a href="#">Usuario</a>
       </div>
     </nav>
-
   );
 };
 
 export default Navigation;
+
+items.PropTypes = {
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      path: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};
