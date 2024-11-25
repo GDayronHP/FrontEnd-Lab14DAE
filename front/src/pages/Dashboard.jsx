@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
+import Navigation from "../components/Navigation";
 
 const Dashboard = () => {
+  const menuItems = ["Inicio", "Servicios", "Contacto"];
+
   const [role, setRole] = useState(null);
 
   useEffect(() => {
@@ -16,10 +19,14 @@ const Dashboard = () => {
   }
 
   return (
-    <div>
-      <h2>Bienvenido, Admin!</h2>
-      <p>Acceso autorizado al área de Administración.</p>
-    </div>
+  
+    <>
+      <Navigation items={menuItems}/>
+      <main className="w-full">
+        <h2>Bienvenido, Admin!</h2>
+        <p>Acceso autorizado al área de Administración.</p>
+      </main>
+    </>
   );
 };
 
