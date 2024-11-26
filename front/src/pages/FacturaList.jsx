@@ -103,7 +103,7 @@ const FacturaList = () => {
         <div className="flex space-x-2 items-center font-body text-md ">
           <label
             htmlFor="import-excel"
-            className="flex btn-primary cursor-pointer p-1 hover:bg-blackhover:bg-opacity-15 transition-all rounded-sm border-white border-[1px] border-opacity-50 px-2 py-1"
+            className="flex btn-primary cursor-pointer p-1 hover:bg-gray-50 hover:bg-opacity-15 transition-all rounded-sm border-white border-[1px] border-opacity-50 px-2 py-1"
           >
             <svg
               className="pr-2 ml-1"
@@ -193,7 +193,7 @@ const FacturaList = () => {
         />
       </div>
       {mensaje && <p className="text-red-500">{mensaje}</p>}
-      <table className="text-white  w-full bg-black shadow rounded-sm overflow-hidden font-body ">
+      <table className="text-white w-full bg-[#0f0f0f]  shadow rounded-sm overflow-hidden font-body ">
         <thead className="bg-black text-left ">
           <tr>
             <th className="px-4 py-2 text-center">Código</th>
@@ -208,20 +208,23 @@ const FacturaList = () => {
           {facturas.map((factura, index) => (
             <tr
               key={index}
-              className="transition-all border-b hover:bg-black  border-white"
+              className="transition-all border-b hover:bg-[#141414] border-white"
             >
               <td className="px-4 py-2">{factura.numero_factura}</td>
               <td className="px-4 py-2">
-                <span
-                  className={`px-2 py-1 rounded text-white ${
-                    factura.estado === "pagada"
-                      ? "bg-black"
-                      : "bg-black"
-                  }`}
-                >
-                  {factura.estado}
-                </span>
+                <div className="flex justify-center items-center h-full">
+                  <span
+                    className={`px-3 py-1 text-white rounded-full text-sm ${
+                      factura.estado === "pagada"
+                        ? "bg-green-500"
+                        : "bg-yellow-500"
+                    }`}
+                  >
+                    {factura.estado}
+                  </span>
+                </div>
               </td>
+
               <td className="px-4 py-2 text-center">${factura.monto}</td>
               <td className="px-4 py-2 text-center">
                 {formatDate(factura.fecha)}
@@ -257,12 +260,22 @@ const FacturaList = () => {
                 </button>
 
                 <div
-                  className= {`flex flex-col absolute -tranblack/2 -tranblack/2  ${exportationState === index ? "block" : "hidden"}`}
+                  className={`flex flex-col absolute -tranblack/2 -tranblack/2  ${
+                    exportationState === index ? "block" : "hidden"
+                  }`}
                 >
-                  <button className="text-start" title="Exportar como PDF" onClick={exportToPDF}>
+                  <button
+                    className="text-start"
+                    title="Exportar como PDF"
+                    onClick={exportToPDF}
+                  >
                     Exportar como PDF
                   </button>
-                  <button className="text-start" title="Exportar como Excel" onClick={exportToExcel}>
+                  <button
+                    className="text-start"
+                    title="Exportar como Excel"
+                    onClick={exportToExcel}
+                  >
                     Exportar como Excel
                   </button>
                 </div>

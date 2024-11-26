@@ -7,6 +7,14 @@ export default {
         header : ['Montserrat', 'sans-serif'],
         body: ['Roboto', 'sans-serif'],
         secondary: ['Poppins', 'sans-serif'],
+      },
+      colors: {
+        primary: "#000000",
+        primaryHover: "#141414",
+        secondary: "#0f0f0f",
+        secondaryHover: "#141414",
+        tertiary: "#2b2b2b",
+        tertiaryHover: "#2b2b2b",
       }
     },
   },
