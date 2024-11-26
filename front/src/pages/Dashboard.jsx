@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 const Dashboard = () => {
 
   const [role, setRole] = useState(null);
@@ -20,8 +19,7 @@ const Dashboard = () => {
   
     <>
       <main className="w-full">
-        <h2>Bienvenido, Admin!</h2>
-        <p>Acceso autorizado al área de Administración.</p>
+        
       </main>
     </>
   );
