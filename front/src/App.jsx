@@ -8,7 +8,7 @@ import FacturaList from "./pages/FacturaList";
 import MainLayout from "./layouts/mainLayout";
 
 const contadorItems = [
-  { name: "Contador", path: "/" },
+  { name: "Contador", path: "/contador" },
   { name: "Formulario de Factura", path: "/factura-form" },
   { name: "Lista de facturas", path: "/factura-list" },
 ];
