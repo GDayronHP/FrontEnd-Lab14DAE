@@ -12,6 +12,13 @@ const contadorItems = [
   { name: "Formulario de Factura", path: "/factura-form" },
   { name: "Lista de facturas", path: "/factura-list" },
 ];
+const adminItmens = [
+  { name: "Dashboard", path: "/dashboard" },
+  { name: "Admin", path: "/dashboard" },
+  { name: "Deudas", path: "/dashboard" },
+  { name: "Resultado", path: "/dashboard" },
+
+]
 
 function App() {
   return (
@@ -44,7 +51,7 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            <MainLayout title="Dashboard">
+            <MainLayout title="Dashboard" items={adminItmens}>
               <Dashboard />
             </MainLayout>
           }

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
+import propTypes from "prop-types";
 
 const Navigation = ({ items }) => {
   return (
@@ -17,18 +17,25 @@ const Navigation = ({ items }) => {
           </li>
         ))}
       </ul>
-      <div className="bg-white">
-        <a href="#">Usuario</a>
-      </div>
     </nav>
   );
 };
 
+<<<<<<< HEAD
+export default Navigation;
+
+Navigation.propTypes = {
+  items: propTypes.arrayOf(
+    propTypes.shape({
+      name: propTypes.string.isRequired,
+      path: propTypes.string.isRequired,
+=======
 Navigation.propTypes = {
   items: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,
       path: PropTypes.string.isRequired,
+>>>>>>> 12bc01c9db7263e5bdeee3d81d48d687779a0904
     })
   ).isRequired,
 };

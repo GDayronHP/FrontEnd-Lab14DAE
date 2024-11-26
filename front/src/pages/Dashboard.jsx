@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Navigation from "../components/Navigation";
 
 const Dashboard = () => {
-  const menuItems = ["Inicio", "Servicios", "Contacto"];
 
   const [role, setRole] = useState(null);
 
@@ -21,7 +19,6 @@ const Dashboard = () => {
   return (
   
     <>
-      <Navigation items={menuItems}/>
       <main className="w-full">
         <h2>Bienvenido, Admin!</h2>
         <p>Acceso autorizado al área de Administración.</p>
