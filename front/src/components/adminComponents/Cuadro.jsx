@@ -1,13 +1,28 @@
 import React from "react";
+import propTypes from "prop-types";
 
-// Componente que recibe cantidad y titulo como props
-const Cuadro = ({ cantidad, titulo }) => {
+const Cuadro = ({ cantidad, titulo, estilo }) => {
   return (
-    <div className="bg-white p-4 border rounded shadow-md">
-      <h2 className="text-xl font-semibold">{titulo}</h2>
-      <p className="text-lg">{cantidad} elementos</p>
+    <div className="text-white">
+      <div className="p-1">
+
+        <div className="text-center mb-2">
+          <h2 className="uppercase text-slate-400 font-semibold">{titulo}</h2>
+        </div>
+
+        <div className={`${estilo} flex justify-center rounded items-center h-24 cursor-pointer duration-500 `}>
+          <p className="text-2xl">{cantidad}</p>
+        </div>
+
+      </div>
     </div>
   );
+};
+
+Cuadro.propTypes = {
+  cantidad: propTypes.string.isRequired,  
+  titulo: propTypes.string.isRequired,
+  estilo: propTypes.string,  // Se mantiene como opcional
 };
 
 export default Cuadro;

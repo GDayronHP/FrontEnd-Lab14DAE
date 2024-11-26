@@ -13,8 +13,8 @@ export default {
         primaryHover: "#141414",
         secondary: "#0f0f0f",
         secondaryHover: "#141414",
-        tertiary: "#2b2b2b",
-        tertiaryHover: "#2b2b2b",
+        tertiary: "#1d1d1d",
+        tertiaryHover: "#222222",
       }
     },
   },
