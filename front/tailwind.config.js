@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        header : ['Montserrat', 'sans-serif'],
+        header: ['Montserrat', 'sans-serif'],
         body: ['Roboto', 'sans-serif'],
         secondary: ['Poppins', 'sans-serif'],
       },
@@ -15,7 +15,21 @@ export default {
         secondaryHover: "#141414",
         tertiary: "#1d1d1d",
         tertiaryHover: "#222222",
-      }
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: 0, visibility: 'hidden', scale: 0 },
+          '100%': { opacity: 1, visibility: 'visible', scale: 1 },
+        },
+        fadeOut: {
+          '0%': { opacity: 1, visibility: 'visible', scale: 1 },
+          '100%': { opacity: 0, visibility: 'hidden', scale: 0 },
+        },
+      },
+      animation: {
+        fadeIn: 'fadeIn 0.15s ease-in-out forwards',
+        fadeOut: 'fadeOut 0.15s ease-in-out forwards',
+      },
     },
   },
   plugins: [],

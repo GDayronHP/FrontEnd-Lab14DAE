@@ -23,10 +23,10 @@ const Navigation = ({ items }) => {
 
 
 Navigation.propTypes = {
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      path: PropTypes.string.isRequired,
+  items: propTypes.arrayOf(
+    propTypes.shape({
+      name: propTypes.string.isRequired,
+      path: propTypes.string.isRequired,
     })
   ).isRequired,
 };

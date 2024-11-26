@@ -12,6 +12,7 @@
   "dependencies": {
     "@shadcn/ui": "^0.0.4",
     "axios": "^1.7.7",
+    "framer-motion": "^11.11.17",
     "jspdf": "^2.5.2",
     "jspdf-autotable": "^3.8.4",
     "pdf-lib": "^1.17.1",
