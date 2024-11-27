@@ -245,7 +245,7 @@ const FacturaList = () => {
         animate={{ opacity: 1, x: 0 }}
         className="flex justify-between items-center mb-4"
       >
-        <h1 className="text-3xl font-header font-bold">Lista de Facturas</h1>
+        <h1 className="text-3xl font-header font-bold">Lista de Facturas CLIENTES</h1>
         <div className="flex space-x-2 items-center font-body text-md ">
           <label
             htmlFor="import-excel"
