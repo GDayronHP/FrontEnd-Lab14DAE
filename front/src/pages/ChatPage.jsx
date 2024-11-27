@@ -3,7 +3,7 @@ import Chat from '../components/chat';
 
 const ChatPage = () => {
   return (
-    <div>
+    <div className='ml-[10rem]'>
       <Chat />
     </div>
   );

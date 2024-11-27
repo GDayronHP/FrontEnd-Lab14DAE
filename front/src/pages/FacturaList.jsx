@@ -8,9 +8,9 @@ import importIcon from "../assets/import.svg";
 import excelIcon from "../assets/exportExcel.svg";
 import pdfIcon from "../assets/exportPdf.svg";
 import Search from "../components/search";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
-// Configurar el worker para pdf.js
+
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.15.349/pdf.worker.min.js";
 
@@ -20,6 +20,8 @@ const FacturaList = () => {
   const [facturas, setFacturas] = useState([]);
   const [mensaje, setMensaje] = useState("");
   const [exportationState, setExportationState] = useState(null);
+  const [showNotification, setShowNotification] = useState(false); // Estado para mostrar la notificación
+  const [notificationData, setNotificationData] = useState(null); // Datos para la notificación
 
   // Obtener el token del almacenamiento local
   const token = localStorage.getItem("access");
@@ -38,9 +40,9 @@ const FacturaList = () => {
 
   const handleExportationOptions = (index) => {
     if (exportationState === index) {
-      setExportationState(null); // Oculta las opciones si ya están visibles
+      setExportationState(null);
     } else {
-      setExportationState(index); // Muestra las opciones para la fila seleccionada
+      setExportationState(index);
     }
   };
 
@@ -52,6 +54,20 @@ const FacturaList = () => {
           const storedFacturas =
             JSON.parse(localStorage.getItem("importedFacturas")) || [];
           setFacturas([...response.data, ...storedFacturas]);
+
+          // Verificar si alguna factura está a punto de vencer
+          response.data.forEach((factura) => {
+            const fechaVencimiento = new Date(factura.fecha_vencimiento);
+            const fechaActual = new Date();
+            const diferencia = Math.ceil(
+              (fechaVencimiento - fechaActual) / (1000 * 3600 * 24)
+            );
+
+            if (diferencia <= 3 && diferencia > 0) {
+              setShowNotification(true);
+              setNotificationData(factura);
+            }
+          });
         } else {
           setMensaje("No se encontraron facturas.");
         }
@@ -60,13 +76,97 @@ const FacturaList = () => {
         setMensaje("Hubo un error al cargar las facturas.");
       }
     };
-  
+
     if (token) {
       fetchFacturas();
     } else {
       setMensaje("No se encontró el token de acceso.");
     }
   }, [token]);
+
+
+  const importFromExcel = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const importedFacturas = XLSX.utils.sheet_to_json(worksheet);
+        console.log("Facturas importadas:", importedFacturas);
+
+        // Verificar y agregar campos faltantes
+        const facturasConCampos = importedFacturas.map(factura => ({
+            id: factura['ID'] || Math.random().toString(36).substr(2, 9), // Generar un ID único si no está presente
+            numero_factura: factura['Número de Factura'] || '',
+            estado: factura['Estado'] || '',
+            fecha_vencimiento: factura['Fecha de Vencimiento'] || '',
+            monto: factura['Monto'] || '',
+            descripcion: factura['Descripción'] || '',
+            fecha: factura['Fecha'] || '',
+            cliente_nombre: factura['Cliente'] || '',
+            usuario_nombre: factura['Usuario'] || ''
+        }));
+
+        setFacturas(prevFacturas => {
+            const updatedFacturas = [...prevFacturas, ...facturasConCampos];
+            localStorage.setItem('importedFacturas', JSON.stringify(updatedFacturas));
+            return updatedFacturas;
+        });
+    };
+    reader.readAsArrayBuffer(file);
+};
+
+  const exportOneToPDF = (facturaId) => {
+    // Buscar la factura correspondiente
+    const factura = facturas.find((factura) => factura.id === facturaId);
+  
+    if (!factura) {
+      console.error("Factura no encontrada.");
+      return;
+    }
+  
+    const doc = new jsPDF();
+    doc.text("Factura Detalles", 20, 10);
+    doc.autoTable({
+      head: [["Número de Factura", "Estado", "Monto", "Fecha", "Cliente"]],
+      body: [
+        [
+          factura.numero_factura,
+          factura.estado,
+          factura.monto,
+          formatDate(factura.fecha),
+          factura.cliente_nombre,
+        ],
+      ],
+    });
+    doc.save(`Factura_${factura.numero_factura}.pdf`);
+  };
+  
+
+  const exportOneToExcel = (facturaId) => {
+    // Buscar la factura correspondiente
+    const factura = facturas.find((factura) => factura.id === facturaId);
+  
+    if (!factura) {
+      console.error("Factura no encontrada.");
+      return;
+    }
+  
+    const worksheet = XLSX.utils.json_to_sheet([
+      {
+        "Número de Factura": factura.numero_factura,
+        Estado: factura.estado,
+        Monto: factura.monto,
+        Fecha: formatDate(factura.fecha),
+        Cliente: factura.cliente_nombre,
+      },
+    ]);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Factura");
+    XLSX.writeFile(workbook, `Factura_${factura.numero_factura}.xlsx`);
+  };
   
 
   // Función para exportar todas las facturas a PDF
@@ -102,8 +202,52 @@ const FacturaList = () => {
     XLSX.writeFile(workbook, "facturas.xlsx");
   };
 
+  const closeNotification = () => {
+    setShowNotification(false);
+    setNotificationData(null);
+  };
+
   return (
-    <div className="w-full p-10 sm:p-6 bg-black text-white  ">
+    <div className="ml-[10rem] mr-[10rem] w-full p-10 sm:p-6 bg-black text-white  ">
+      {/* Notificación */}
+      {showNotification && notificationData && (
+        <AnimatePresence>
+          <motion.div
+            className="flex-col fixed top-4 right-4 z-50 bg-gray-800 text-white p-4 rounded-md shadow-lg flex items-center space-x-4"
+            initial={{ opacity: 0, x: 50 }} // Comienza desde un estado invisible y desfasado
+            animate={{ opacity: 1, x: 0 }} // Finaliza en estado visible y centrado
+            exit={{ opacity: 0, x: 50 }} // Cuando se cierre, se desvanece y se mueve hacia la derecha
+            transition={{ duration: 0.3 }} // Duración de la animación
+          >
+            <div>
+              <p className="font-bold font-secondary text-lg mb-2">
+                Factura a punto de vencer
+              </p>
+              <p className="font-body">
+                Cliente: {notificationData.cliente_nombre}
+              </p>
+              <p className="font-body mb-2">
+                Fecha de vencimiento:{" "}
+                {formatDate(notificationData.fecha_vencimiento)}
+              </p>
+            </div>
+            <div className="font-body flex space-x-4">
+              <a
+                href={`mailto:${notificationData.cliente_nombre}@example.com`}
+                className="transition-all bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              >
+                Enviar Correo
+              </a>
+              <button
+                onClick={closeNotification}
+                className="transition-all bg-red-600 text-white p-2 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300"
+              >
+                Cerrar
+              </button>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      )}
       <motion.div
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
@@ -115,7 +259,7 @@ const FacturaList = () => {
             htmlFor="import-excel"
             className="flex btn-primary cursor-pointer p-1 hover:bg-gray-50 hover:bg-opacity-15 transition-all rounded-sm border-white border-[1px] border-opacity-50 px-2 py-1"
           >
-            <img className="pr-2 ml-1" src={importIcon} />
+            <img className="pr-2 ml-1" src={importIcon}  />
 
             <p>Importar</p>
           </label>
@@ -123,7 +267,7 @@ const FacturaList = () => {
             id="import-excel"
             type="file"
             accept=".xlsx"
-            onChange={(e) => console.log(e.target.files[0])}
+            onChange={importFromExcel} 
             className="hidden"
           />
           <button
@@ -150,18 +294,7 @@ const FacturaList = () => {
         }}
         className="flex space-x-2 my-5 w-full outline-none border-none"
       >
-        <Search
-          elements={facturas.map((factura) => {
-            return {
-              estado: factura.estado,
-              monto: factura.monto,
-              cliente: factura.cliente_nombre,
-              codigo: factura.numero_factura,
-              fecha: factura.fecha,
-            };
-          })}
-          setFacturas={setFacturas}
-        />
+        <Search elements={facturas} setFacturas={setFacturas} />
       </motion.div>
       {mensaje && <p className="text-red-500">{mensaje}</p>}
       <motion.table
@@ -241,9 +374,9 @@ const FacturaList = () => {
                   }`}
                 >
                   <button
-                    className="flex transition-all text-start p-1 rounded-sm hover:bg-white hover:bg-opacity-15 "
+                    className="flex transition-all text-start p-1 rounded-sm hover:bg-white hover:bg-opacity-15"
                     title="Exportar como PDF"
-                    onClick={exportToPDF}
+                    onClick={() => exportOneToPDF(factura.id, "cliente")} // Cambia 'cliente' si es necesario
                   >
                     <img className="mr-1" src={pdfIcon} />
                     Exportar como PDF
@@ -251,7 +384,7 @@ const FacturaList = () => {
                   <button
                     className="flex transition-all text-start p-1 rounded-sm hover:bg-white hover:bg-opacity-15"
                     title="Exportar como Excel"
-                    onClick={exportToExcel}
+                    onClick={() => exportOneToExcel(factura.id, "cliente")} // Cambia 'cliente' si es necesario
                   >
                     <img className="mr-1" src={excelIcon} />
                     Exportar como Excel

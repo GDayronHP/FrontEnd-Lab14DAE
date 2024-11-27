@@ -2,7 +2,7 @@ import axios from "axios";
 
 const CLIENTE_BASE_REST_API_URL = "http://127.0.0.1:8000/api/auth";
 
-class GerenteService {
+class FacturaService {
   getFacturas() {
     return axios.get(CLIENTE_BASE_REST_API_URL + "/facturas-clientes/");
   }
@@ -36,4 +36,4 @@ class GerenteService {
   }
 }
 
-export default new GerenteService();
+export default new FacturaService();

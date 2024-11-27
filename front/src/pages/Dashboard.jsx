@@ -59,6 +59,7 @@ const Dashboard = () => {
   }
 
   return (
+<<<<<<< HEAD
     <main className="flex flex-col w-full bg-primary h-screen p-5">
       <div className="grid grid-cols-3 gap-1">
         {/* Cuadro de Cobrar */}
@@ -67,6 +68,14 @@ const Dashboard = () => {
         <Cuadro estilo="bg-secondary hover:bg-secondaryHover" cantidad={totalPagarCliente} titulo="Pagado-cliente" />
         {/* Cuadro de Facturas Vencidas */}
         <Cuadro estilo="bg-red-700 hover:bg-secondaryHover" cantidad={totalFacturaVencida} titulo="Fa. Vencidas-cliente" />
+=======
+    <>
+      <main className="ml-[10rem] flex flex-col  w-full bg-primary h-screen p-5">
+        <div className="grid grid-cols-3 gap-1">
+          <Cuadro estilo="bg-secondary hover:bg-secondaryHover " cantidad="4" titulo="Pagar" />
+          <Cuadro estilo="bg-secondary hover:bg-secondaryHover " cantidad="4" titulo="Cobrar" />
+          <Cuadro estilo="bg-red-700 hover:bg-secondaryHover " cantidad="4"  titulo="Fa. Vencidas" />
+>>>>>>> d4a5b28ee70c904d06c6db88ca455feb7cd4e70d
 
         {/* Otros cuadros */}
         <Cuadro estilo="bg-secondary hover:bg-secondaryHover" cantidad="4" titulo="Pagar" />

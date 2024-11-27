@@ -27,7 +27,7 @@ const Contador = () => {
   }
 
   return (
-    <div className="flex justify-center items-center bg-primary w-full text-white  h-screen">
+    <div className="ml-[10rem] flex justify-center items-center bg-primary w-full text-white  h-screen">
       <motion.div
         initial={{
           opacity: 0,

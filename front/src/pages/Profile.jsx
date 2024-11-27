@@ -75,7 +75,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-primary">
+    <div className="flex ml-[10rem] justify-center items-center min-h-screen bg-primary">
       <motion.div
         initial={{
           opacity: 0,

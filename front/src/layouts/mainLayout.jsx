@@ -16,7 +16,7 @@ function MainLayout({ title, children, items }) {
       ) : (
         ""
       )}
-      <div className="ml-[10rem] w-full">{children}</div>
+      <div className=" w-full">{children}</div>
     </React.Fragment>
   );
 }
