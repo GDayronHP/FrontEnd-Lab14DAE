@@ -8,6 +8,8 @@ import FacturaList from "./pages/FacturaList";
 import MainLayout from "./layouts/mainLayout";
 import Profile from "./pages/Profile";
 import ChatPage from "./pages/ChatPage";
+import FacturaProveedorForm from "./pages/facturaProveedor";
+import Prueba from "./pages/prueba";
 
 const contadorItems = [
   { name: "Inicio", path: "/contador" },
@@ -15,14 +17,15 @@ const contadorItems = [
   { name: "Lista de facturas", path: "/factura-list" },
   { name: "Edición de perfil", path: "/edit-profile" },
   { name: "Chat", path: "/chat" },
+  { name: "Factura del proveedor", path: "/factura-proveedor" },
+  { name: "Prueba", path: "/prueba" },
 ];
 const adminItmens = [
   { name: "Dashboard", path: "/dashboard" },
   { name: "Admin", path: "/dashboard" },
   { name: "Deudas", path: "/dashboard" },
   { name: "Resultado", path: "/dashboard" },
-
-]
+];
 
 function App() {
   return (
@@ -89,6 +92,24 @@ function App() {
           element={
             <MainLayout title="Chat" items={contadorItems}>
               <ChatPage />
+            </MainLayout>
+          }
+        />
+
+        <Route
+          path="/factura-proveedor"
+          element={
+            <MainLayout title="Factura del proveedor" items={contadorItems}>
+              <FacturaProveedorForm />
+            </MainLayout>
+          }
+        />
+
+        <Route
+          path="/prueba"
+          element={
+            <MainLayout title="Pruebas" items={contadorItems}>
+              <Prueba />
             </MainLayout>
           }
         />

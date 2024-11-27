@@ -20,7 +20,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <main className="flex flex-col  w-full bg-primary h-screen p-5">
+      <main className="ml-[10rem] flex flex-col  w-full bg-primary h-screen p-5">
         <div className="grid grid-cols-3 gap-1">
           <Cuadro estilo="bg-secondary hover:bg-secondaryHover " cantidad="4" titulo="Pagar" />
           <Cuadro estilo="bg-secondary hover:bg-secondaryHover " cantidad="4" titulo="Cobrar" />
