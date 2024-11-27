@@ -17,11 +17,11 @@ const Search = ({ elements, setFilteredFacturas }) => {
       // Filtrar por cliente
       const clienteMatch = element.cliente_nombre
         .toLowerCase()
-        .includes(newSearch.cliente.toLowerCase()); // Usamos newSearch aquí
+        .includes(newSearch.cliente.toLowerCase()); 
 
       // Filtrar por fecha
       const fechaMatch = newSearch.fecha
-        ? element.fecha.includes(newSearch.fecha) // Usamos newSearch aquí
+        ? element.fecha.includes(newSearch.fecha) 
         : true;
 
       // Filtrar por estado

@@ -82,6 +82,8 @@ const FacturaList = () => {
       setMensaje("No se encontró el token de acceso.");
     }
   }, [token]);
+
+  console.log(token);
   
 
   const handleFileChange = (e) => {
@@ -101,9 +103,10 @@ const FacturaList = () => {
       formData.append("file", file);
       formData.append("tipo", "cliente");
 
+
       try {
         const response = await axios.post(
-          "http://127.0.0.1:8000/api/auth/importar-facturas-csv/",
+          "https://trabajofinaldjango.onrender.com/api/auth/importar-facturas-csv/",
           formData,
           {
             headers: {
