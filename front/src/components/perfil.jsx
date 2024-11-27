@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Importar useNavigate
 
 function Perfil() {
   // Estado para controlar la visibilidad del menú
@@ -17,6 +18,22 @@ function Perfil() {
     if (perfilRef.current && !perfilRef.current.contains(event.target)) {
       setMenuVisible(false);
     }
+  };
+
+  // Redirigir al usuario
+  const navigate = useNavigate();
+
+  // Función de logout (eliminar token y redirigir)
+  const handleLogout = () => {
+    // Eliminar el token del localStorage (o sessionStorage, dependiendo de tu implementación)
+    localStorage.removeItem('token'); // Si usas localStorage
+    // sessionStorage.removeItem('token'); // Si usas sessionStorage
+
+    // También puedes eliminar otro tipo de información como el historial de usuario, si es necesario
+    localStorage.removeItem('user'); // Ejemplo de eliminar datos del usuario
+
+    // Redirigir a la página principal o inicio
+    navigate('/');
   };
 
   useEffect(() => {
@@ -48,7 +65,13 @@ function Perfil() {
               <a href='/configurar' className='hover:text-slate-300'>Configurar</a>
             </li>
             <li>
-              <a href='/salir' className='hover:text-slate-300'>Salir</a>
+              <a
+                href='/salir'
+                className='hover:text-slate-300'
+                onClick={handleLogout} // Llamar a la función de logout al hacer clic
+              >
+                Salir
+              </a>
             </li>
           </ul>
         </div>

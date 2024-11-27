@@ -10,21 +10,18 @@ import Profile from "./pages/Profile";
 import ChatPage from "./pages/ChatPage";
 import FacturaProveedorForm from "./pages/facturaProveedor";
 import Prueba from "./pages/prueba";
+import FacturaListProveedor from "./pages/FacturaListaProveedor";
 
 const contadorItems = [
   { name: "Inicio", path: "/contador" },
   { name: "Formulario de Factura", path: "/factura-form" },
-  { name: "Lista de facturas", path: "/factura-list" },
+  { name: "Lista de factura cliente", path: "/factura-list" },
   { name: "Edición de perfil", path: "/edit-profile" },
   { name: "Chat", path: "/chat" },
   { name: "Factura del proveedor", path: "/factura-proveedor" },
   { name: "Prueba", path: "/prueba" },
-];
-const adminItmens = [
   { name: "Dashboard", path: "/dashboard" },
-  { name: "Admin", path: "/dashboard" },
-  { name: "Deudas", path: "/dashboard" },
-  { name: "Resultado", path: "/dashboard" },
+  { name: "Lista de factura proveedor", path: "/factura-List-proveedor" },
 ];
 
 function App() {
@@ -56,14 +53,6 @@ function App() {
           }
         />
         <Route
-          path="/dashboard"
-          element={
-            <MainLayout title="Dashboard" items={adminItmens}>
-              <Dashboard />
-            </MainLayout>
-          }
-        />
-        <Route
           path="/factura-form"
           element={
             <MainLayout title="Formulario de factura" items={contadorItems}>
@@ -80,9 +69,17 @@ function App() {
           }
         />
         <Route
+          path="/dashboard"
+          element={
+            <MainLayout title="dashboard" items={contadorItems}>
+              <Dashboard />
+            </MainLayout>
+          }
+        />
+        <Route
           path="/edit-profile"
           element={
-            <MainLayout title="edición de perfil" items={contadorItems}>
+            <MainLayout title="Edición de perfil" items={contadorItems}>
               <Profile />
             </MainLayout>
           }
@@ -95,7 +92,6 @@ function App() {
             </MainLayout>
           }
         />
-
         <Route
           path="/factura-proveedor"
           element={
@@ -104,7 +100,14 @@ function App() {
             </MainLayout>
           }
         />
-
+        <Route
+          path="/factura-List-proveedor"
+          element={
+            <MainLayout title="Lista de factura proveedor" items={contadorItems}>
+              <FacturaListProveedor/>
+            </MainLayout>
+          }
+        />
         <Route
           path="/prueba"
           element={
