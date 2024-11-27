@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import propTypes from "prop-types";
 
-const Navigation = ({ items }) => {
+const Navigation = ({ items, perfil }) => {
   return (
     <nav className="w-40 h-screen flex flex-col justify-between bg-[#0f0f0f] border-r-[1px]  border-opacity-25 border-white">
       <ul className="flex flex-col items-start space-y-2 p-4 ">
@@ -17,6 +17,7 @@ const Navigation = ({ items }) => {
           </li>
         ))}
       </ul>
+      {perfil ? perfil : ""}
     </nav>
   );
 };

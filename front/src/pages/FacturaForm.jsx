@@ -89,7 +89,7 @@ const FacturaForm = () => {
   };
 
   return (
-    <div className="w-full h-screen flex items-center justify-center bg-primary">
+    <div className="flex justify-center items-center min-h-screen bg-primary">
       <motion.div
         initial={{
           opacity: 0,
@@ -99,11 +99,13 @@ const FacturaForm = () => {
           opacity: 1,
           scale: 1,
         }}
-        className="bg-secondary text-white p-6 rounded-sm shadow-md w-1/2 "
+        className="bg-secondary text-white p-6 rounded-sm shadow-md w-11/12 sm:w-9/12 lg:w-1/3 border-white border-[1px] border-opacity-15 "
       >
-        <h1 className="text-2xl font-bold mb-4">Crear Nueva Factura</h1>
+        <h1 className="font-header text-2xl font-bold mb-4 text-center">
+          Crear Nueva Factura
+        </h1>
         {mensaje && <p className="text-yellow-400 mb-4">{mensaje}</p>}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 font-body">
           <div>
             <label className="block text-sm font-medium mb-1">Cliente</label>
             <select
@@ -162,12 +164,13 @@ const FacturaForm = () => {
             <textarea
               value={descripcion}
               onChange={(e) => setDescripcion(e.target.value)}
-              className="w-full bg-tertiary text-white rounded-sm p-2"
+              className="w-full bg-tertiary text-white rounded-sm p-2 h-36
+              resize-none"
             />
           </div>
           <button
             type="submit"
-            className="transition-all w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-sm"
+            className="transition-all w-full bg-green-600 hover:bg-green-700 text-white y-2 p-3 rounded-sm"
           >
             Generar Factura
           </button>

@@ -1,6 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import Navigation from "../components/Navigation";
+import Perfil from "../components/Perfil";
 
 function MainLayout({ title, children, items }) {
   return (
@@ -9,13 +10,13 @@ function MainLayout({ title, children, items }) {
         <title>{title}</title>
       </Helmet>
       {items ? (
-        <header>
-          <Navigation items={items} />
+        <header className="fixed">
+          <Navigation items={items} perfil={<Perfil />} />
         </header>
       ) : (
         ""
       )}
-      {children}
+      <div className="ml-[10rem] w-full">{children}</div>
     </React.Fragment>
   );
 }

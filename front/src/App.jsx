@@ -6,11 +6,15 @@ import Dashboard from "./pages/Dashboard";
 import FacturaForm from "./pages/FacturaForm";
 import FacturaList from "./pages/FacturaList";
 import MainLayout from "./layouts/mainLayout";
+import Profile from "./pages/Profile";
+import ChatPage from "./pages/ChatPage";
 
 const contadorItems = [
-  { name: "Contador", path: "/contador" },
+  { name: "Inicio", path: "/contador" },
   { name: "Formulario de Factura", path: "/factura-form" },
   { name: "Lista de facturas", path: "/factura-list" },
+  { name: "Edición de perfil", path: "/edit-profile" },
+  { name: "Chat", path: "/chat" },
 ];
 const adminItmens = [
   { name: "Dashboard", path: "/dashboard" },
@@ -69,6 +73,22 @@ function App() {
           element={
             <MainLayout title="Lista de facturas" items={contadorItems}>
               <FacturaList />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/edit-profile"
+          element={
+            <MainLayout title="edición de perfil" items={contadorItems}>
+              <Profile />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/chat"
+          element={
+            <MainLayout title="Chat" items={contadorItems}>
+              <ChatPage />
             </MainLayout>
           }
         />

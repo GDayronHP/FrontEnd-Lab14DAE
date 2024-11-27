@@ -7,7 +7,7 @@ import * as pdfjsLib from "pdfjs-dist/build/pdf";
 import importIcon from "../assets/import.svg";
 import excelIcon from "../assets/exportExcel.svg";
 import pdfIcon from "../assets/exportPdf.svg";
-import searchIcon from "../assets/search.svg";
+import Search from "../components/search";
 import { motion } from "framer-motion";
 
 // Configurar el worker para pdf.js
@@ -60,13 +60,14 @@ const FacturaList = () => {
         setMensaje("Hubo un error al cargar las facturas.");
       }
     };
-
+  
     if (token) {
       fetchFacturas();
     } else {
       setMensaje("No se encontró el token de acceso.");
     }
   }, [token]);
+  
 
   // Función para exportar todas las facturas a PDF
   const exportToPDF = () => {
@@ -149,12 +150,18 @@ const FacturaList = () => {
         }}
         className="flex space-x-2 my-5 w-full outline-none border-none"
       >
-        <input
-          className="text-sm border-[1px] focus:bg-secondaryHover  bg-secondary border-white border-opacity-15 focus:border-opacity-50 outline-none font-body w-full rounded-sm h-10 p-2"
-          type="text"
-          placeholder="Buscar por cliente o por código..."
+        <Search
+          elements={facturas.map((factura) => {
+            return {
+              estado: factura.estado,
+              monto: factura.monto,
+              cliente: factura.cliente_nombre,
+              codigo: factura.numero_factura,
+              fecha: factura.fecha,
+            };
+          })}
+          setFacturas={setFacturas}
         />
-        <img className="border-[1px] bg-tertiary hover:bg-tertiaryHover cursor-pointer border-white border-opacity-15 focus:border-opacity-50 outline-none font-body rounded-sm h-10 p-2" src={searchIcon} />
       </motion.div>
       {mensaje && <p className="text-red-500">{mensaje}</p>}
       <motion.table
