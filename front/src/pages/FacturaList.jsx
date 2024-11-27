@@ -84,39 +84,31 @@ const FacturaList = () => {
     }
   }, [token]);
 
-
-  const importFromExcel = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        const importedFacturas = XLSX.utils.sheet_to_json(worksheet);
-        console.log("Facturas importadas:", importedFacturas);
-
-        // Verificar y agregar campos faltantes
-        const facturasConCampos = importedFacturas.map(factura => ({
-            id: factura['ID'] || Math.random().toString(36).substr(2, 9), // Generar un ID único si no está presente
-            numero_factura: factura['Número de Factura'] || '',
-            estado: factura['Estado'] || '',
-            fecha_vencimiento: factura['Fecha de Vencimiento'] || '',
-            monto: factura['Monto'] || '',
-            descripcion: factura['Descripción'] || '',
-            fecha: factura['Fecha'] || '',
-            cliente_nombre: factura['Cliente'] || '',
-            usuario_nombre: factura['Usuario'] || ''
-        }));
-
-        setFacturas(prevFacturas => {
-            const updatedFacturas = [...prevFacturas, ...facturasConCampos];
-            localStorage.setItem('importedFacturas', JSON.stringify(updatedFacturas));
-            return updatedFacturas;
-        });
-    };
-    reader.readAsArrayBuffer(file);
-};
+  const handleImport = async (e) => {
+    e.preventDefault();
+    if (!file) {
+      setMensaje('Por favor, selecciona un archivo.');
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append('file', file);
+  
+    try {
+      const token = localStorage.getItem('access');
+      const response = await axios.post(`http://127.0.0.1:8000/api/auth/importar-facturas-csv/?tipo=${tipo}`, formData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,  // Fixed here: added backticks for proper string interpolation
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      setMensaje('Archivo importado exitosamente.');
+    } catch (error) {
+      console.error('Error al importar el archivo:', error);
+      setMensaje('Error al importar el archivo.');
+    }
+  };
+  
 
   const exportOneToPDF = (facturaId) => {
     // Buscar la factura correspondiente
@@ -266,8 +258,8 @@ const FacturaList = () => {
           <input
             id="import-excel"
             type="file"
-            accept=".xlsx"
-            onChange={importFromExcel} 
+            accept=".csv"
+            onChange={handleImport}
             className="hidden"
           />
           <button
@@ -308,7 +300,7 @@ const FacturaList = () => {
         <thead className="bg-tertiary border-b border-opacity-15 border-white hover:bg-tertiaryHover text-left ">
           <tr>
             <th className="px-4 py-2 text-center">Código</th>
-            <th className="px-4 py-2 text-center">Estado</th>
+            <th className="px-4 pransitxt-center">Estado</th>
             <th className="px-4 py-2 text-center">Monto</th>
             <th className="px-4 py-2 text-center">Fecha</th>
             <th className="px-4 py-2 text-center">Cliente</th>
