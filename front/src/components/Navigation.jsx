@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import propTypes from "prop-types";
+import PropTypes from "prop-types";
 
 const Navigation = ({ items, perfil }) => {
   return (
@@ -21,6 +21,7 @@ const Navigation = ({ items, perfil }) => {
     </nav>
   );
 };
+
 
 Navigation.propTypes = {
   items: propTypes.arrayOf(
