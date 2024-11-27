@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const AdminService = () => {
-    const CLIENTE_BASE_REST_API_URL = "http://127.0.0.1:8000/api/auth";
+    const CLIENTE_BASE_REST_API_URL = "https://trabajofinaldjango.onrender.com/api/auth";
     const [fechaInicio, setFechaInicio] = useState('');
     const [fechaFin, setFechaFin] = useState('');
     const [resultados, setResultados] = useState(null);
@@ -18,7 +18,7 @@ const AdminService = () => {
 
         try {
         const token = localStorage.getItem('access');
-        const response = await axios.get('http://127.0.0.1:8000/api/auth/proyeccion-flujo-caja/', {
+        const response = await axios.get('https://trabajofinaldjango.onrender.com/api/auth/proyeccion-flujo-caja/', {
             params: {
             fecha_inicio: fechaInicio,
             fecha_fin: fechaFin

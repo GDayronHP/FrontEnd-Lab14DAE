@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const CLIENTE_BASE_REST_API_URL = "http://127.0.0.1:8000/api/auth";
+const CLIENTE_BASE_REST_API_URL = "https://trabajofinaldjango.onrender.com/api/auth";
 
 class FacturaService {
   getFacturas() {
@@ -9,7 +9,7 @@ class FacturaService {
 
   setFactura(factura, token) {
     return axios.post(
-      "http://127.0.0.1:8000/api/auth/facturas-clientes/",
+      "https://trabajofinaldjango.onrender.com/api/auth/facturas-clientes/",
       factura,
       {
         headers: {
@@ -28,7 +28,7 @@ class FacturaService {
   }
 
   getUserLogued(token) {
-    return axios.get("http://127.0.0.1:8000/api/auth/usuario-logueado/", {
+    return axios.get("https://trabajofinaldjango.onrender.com/api/auth/usuario-logueado/", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const ADMIN_BASE_REST_API_URL = "http://127.0.0.1:8000/api/auth/";
+const ADMIN_BASE_REST_API_URL = "https://trabajofinaldjango.onrender.com/api/auth/";
 
 class DashboardService {
     // Centraliza el manejo del token

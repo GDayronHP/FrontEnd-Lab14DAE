@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // URL base de la API para las facturas de proveedores
-const PROVEEDOR_BASE_REST_API_URL = "http://127.0.0.1:8000/api/auth";
+const PROVEEDOR_BASE_REST_API_URL = "https://trabajofinaldjango.onrender.com/api/auth";
 
 class FacturaProveedorService {
   // Obtener las facturas de proveedores
@@ -12,7 +12,7 @@ class FacturaProveedorService {
   // Crear una nueva factura de proveedor
   setFactura(factura, token) {
     return axios.post(
-      "http://127.0.0.1:8000/api/auth/facturas-proveedores/", // Ruta para crear factura de proveedor
+      "https://trabajofinaldjango.onrender.com/api/auth/facturas-proveedores/", // Ruta para crear factura de proveedor
       factura,
       {
         headers: {
@@ -25,7 +25,7 @@ class FacturaProveedorService {
   // Actualizar una factura de proveedor
   updateFactura(id, factura, token) {
     return axios.put(
-      `http://127.0.0.1:8000/api/auth/facturas-proveedores/${id}/`, // Ruta para actualizar factura de proveedor
+      `https://trabajofinaldjango.onrender.com/api/auth/facturas-proveedores/${id}/`, // Ruta para actualizar factura de proveedor
       factura,
       {
         headers: {
@@ -46,7 +46,7 @@ class FacturaProveedorService {
 
   // Obtener el usuario logueado
   getUserLogued(token) {
-    return axios.get("http://127.0.0.1:8000/api/auth/usuario-logueado/", {
+    return axios.get("https://trabajofinaldjango.onrender.com/api/auth/usuario-logueado/", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

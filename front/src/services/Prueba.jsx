@@ -17,7 +17,7 @@ const Prueba = () => {
 
     try {
       const token = localStorage.getItem('access');
-      const response = await axios.get('http://127.0.0.1:8000/api/auth/proyeccion-flujo-caja/', {
+      const response = await axios.get('https://trabajofinaldjango.onrender.com/api/auth/proyeccion-flujo-caja/', {
         params: {
           fecha_inicio: fechaInicio,
           fecha_fin: fechaFin

@@ -20,7 +20,7 @@ const FacturaProveedorForm = () => {
     const fetchProveedores = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/auth/proveedores/",
+          "https://trabajofinaldjango.onrender.com/api/auth/proveedores/",
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setProveedores(response.data);
@@ -32,7 +32,7 @@ const FacturaProveedorForm = () => {
     const fetchUsuario = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/auth/usuario-logueado/",
+          "https://trabajofinaldjango.onrender.com/api/auth/usuario-logueado/",
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setUsuario(response.data);
@@ -69,7 +69,7 @@ const FacturaProveedorForm = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/auth/facturas-proveedores/",
+        "https://trabajofinaldjango.onrender.com/api/auth/facturas-proveedores/",
         factura,
         { headers: { Authorization: `Bearer ${token}` } }
       );

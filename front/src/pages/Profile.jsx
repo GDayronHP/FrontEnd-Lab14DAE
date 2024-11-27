@@ -15,7 +15,7 @@ const Profile = () => {
       try {
         const token = localStorage.getItem("access");
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/auth/usuario-logueado/",
+          "https://trabajofinaldjango.onrender.com/api/auth/usuario-logueado/",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -51,7 +51,7 @@ const Profile = () => {
     try {
       const token = localStorage.getItem("access");
       const response = await axios.put(
-        "http://127.0.0.1:8000/api/auth/usuario-logueado/",
+        "https://trabajofinaldjango.onrender.com/api/auth/usuario-logueado/",
         data,
         {
           headers: {

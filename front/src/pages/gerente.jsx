@@ -34,12 +34,12 @@ const Gerente = () => {
     const fetchData = async () => {
       try {
         const [auditLogsResponse, clientesResponse, proveedoresResponse, facturasClientesResponse, facturasProveedoresResponse, usuariosFacturadosResponse] = await Promise.all([
-          axios.get("http://127.0.0.1:8000/api/auth/audit-logs/"),
-          axios.get("http://127.0.0.1:8000/api/auth/clientes/"),
-          axios.get("http://127.0.0.1:8000/api/auth/proveedores/"),
-          axios.get("http://127.0.0.1:8000/api/auth/facturas-clientes/"),
-          axios.get("http://127.0.0.1:8000/api/auth/facturas-proveedores/"),
-          axios.get("http://127.0.0.1:8000/api/auth/total-facturas-por-usuario/", {
+          axios.get("https://trabajofinaldjango.onrender.com/api/auth/audit-logs/"),
+          axios.get("https://trabajofinaldjango.onrender.com/api/auth/clientes/"),
+          axios.get("https://trabajofinaldjango.onrender.com/api/auth/proveedores/"),
+          axios.get("https://trabajofinaldjango.onrender.com/api/auth/facturas-clientes/"),
+          axios.get("https://trabajofinaldjango.onrender.com/api/auth/facturas-proveedores/"),
+          axios.get("https://trabajofinaldjango.onrender.com/api/auth/total-facturas-por-usuario/", {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -64,8 +64,8 @@ const Gerente = () => {
   const aprobarFactura = async (id, tipo) => {
     try {
       const url = tipo === "cliente"
-        ? `http://127.0.0.1:8000/api/auth/facturas-clientes/${id}/`
-        : `http://127.0.0.1:8000/api/auth/facturas-proveedores/${id}/`;
+        ? `https://trabajofinaldjango.onrender.com/api/auth/facturas-clientes/${id}/`
+        : `https://trabajofinaldjango.onrender.com/api/auth/facturas-proveedores/${id}/`;
       const response = await axios.get(url);
       if (response.data.estado === "aprobada") {
         alert("Esta factura ya está aprobada.");
@@ -81,8 +81,8 @@ const Gerente = () => {
   const rechazarFactura = async (id, tipo) => {
     try {
       const url = tipo === "cliente"
-        ? `http://127.0.0.1:8000/api/auth/facturas-clientes/${id}/`
-        : `http://127.0.0.1:8000/api/auth/facturas-proveedores/${id}/`;
+        ? `https://trabajofinaldjango.onrender.com/api/auth/facturas-clientes/${id}/`
+        : `https://trabajofinaldjango.onrender.com/api/auth/facturas-proveedores/${id}/`;
       await axios.patch(url, { accion: false });
       alert("Factura rechazada exitosamente");
     } catch (error) {
@@ -92,7 +92,7 @@ const Gerente = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post("http://127.0.0.1:8000/api/auth/logout/");
+      await axios.post("https://trabajofinaldjango.onrender.com/api/auth/logout/");
       localStorage.removeItem("access");
       localStorage.removeItem("user");
       navigate("/");

@@ -1,13 +1,37 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+  Filler,
+} from "chart.js";
+
+// Registra los componentes necesarios para el gráfico
+ChartJS.register(
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+);
 
 const Prueba = () => {
   const [fechaInicio, setFechaInicio] = useState("");
   const [fechaFin, setFechaFin] = useState("");
   const [resultados, setResultados] = useState(null);
+  const [graficoData, setGraficoData] = useState(null);
   const [mensaje, setMensaje] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!fechaInicio || !fechaFin) {
@@ -15,30 +39,43 @@ const Prueba = () => {
       return;
     }
 
-    try {
-      const token = localStorage.getItem("access");
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/auth/proyeccion-flujo-caja/",
+    // Generar datos de ejemplo para el gráfico
+    const periodos = ["Enero", "Febrero", "Marzo", "Abril", "Mayo"];
+    const ingresosMensuales = [5000, 6000, 7000, 8000, 9000];
+    const egresosMensuales = [2000, 3000, 4000, 3000, 2000];
+
+    setResultados({
+      ingresos: ingresosMensuales.reduce((acc, curr) => acc + curr, 0), // Suma total de ingresos
+      egresos: egresosMensuales.reduce((acc, curr) => acc + curr, 0),   // Suma total de egresos
+      flujo_caja: ingresosMensuales.reduce((acc, curr) => acc + curr, 0) - egresosMensuales.reduce((acc, curr) => acc + curr, 0), // Flujo de caja
+    });
+
+    const data = {
+      labels: periodos,
+      datasets: [
         {
-          params: {
-            fecha_inicio: fechaInicio,
-            fecha_fin: fechaFin,
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setResultados(response.data);
-      setMensaje("");
-    } catch (error) {
-      console.error("Error al obtener la proyección de flujo de caja:", error);
-      setMensaje("Hubo un error al obtener la proyección de flujo de caja.");
-    }
+          label: "Ingresos",
+          data: ingresosMensuales,
+          borderColor: "rgba(75, 192, 192, 1)",
+          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          fill: true,
+        },
+        {
+          label: "Egresos",
+          data: egresosMensuales,
+          borderColor: "rgba(255, 99, 132, 1)",
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          fill: true,
+        },
+      ],
+    };
+
+    setGraficoData(data);
+    setMensaje("");
   };
 
   return (
-    <div className="ml-[10rem] bg-primary h-screen flex justify-center items-center">
+    <div className="p-6 ml-[10rem] bg-primary min-h-screen flex justify-center items-center">
       <div className="bg-secondary border-[1px] border-white border-opacity-15 text-white p-8 rounded-md shadow-lg w-full max-w-lg">
         <h1 className="text-2xl font-bold text-center mb-6 font-header">
           Proyección de Flujo de Caja
@@ -54,7 +91,7 @@ const Prueba = () => {
               value={fechaInicio}
               onChange={(e) => setFechaInicio(e.target.value)}
               required
-              className="w-full mt-2 p-3 rounded-lg bg-tertiary border border-secondary text-white focus:outline-none focus:ring-2 "
+              className="w-full mt-2 p-3 rounded-lg bg-tertiary border border-secondary text-white focus:outline-none focus:ring-2"
             />
           </div>
 
@@ -65,7 +102,7 @@ const Prueba = () => {
               value={fechaFin}
               onChange={(e) => setFechaFin(e.target.value)}
               required
-              className="w-full mt-2 p-3 rounded-lg bg-tertiary border border-secondary text-white focus:outline-none focus:ring-2 "
+              className="w-full mt-2 p-3 rounded-lg bg-tertiary border border-secondary text-white focus:outline-none focus:ring-2"
             />
           </div>
 
@@ -86,6 +123,17 @@ const Prueba = () => {
               <p>Ingresos: {resultados.ingresos}</p>
               <p>Egresos: {resultados.egresos}</p>
               <p>Flujo de Caja: {resultados.flujo_caja}</p>
+            </div>
+          </div>
+        )}
+
+        {graficoData && (
+          <div className="mt-8 bg-tertiary p-4 rounded-lg shadow-md">
+            <h2 className="text-xl text-center text-blue-400 mb-4 font-header">
+              Gráfico de Flujo de Caja
+            </h2>
+            <div style={{ position: "relative", width: "100%", height: "400px" }}>
+              <Line data={graficoData} options={{ maintainAspectRatio: false }} />
             </div>
           </div>
         )}

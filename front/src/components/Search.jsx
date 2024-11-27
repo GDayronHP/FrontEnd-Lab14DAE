@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Search = ({ elements, setFacturas }) => {
+const Search = ({ elements, setFilteredFacturas }) => {
   const [search, setSearch] = useState({
     cliente: "",
     fecha: "",
@@ -9,30 +9,31 @@ const Search = ({ elements, setFacturas }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setSearch((prev) => ({ ...prev, [name]: value }));
+    const newSearch = { ...search, [name]: value };
+    setSearch(newSearch);
 
     // Filtrar elementos
     const filtered = elements.filter((element) => {
       // Filtrar por cliente
-      const clienteMatch = element.cliente
+      const clienteMatch = element.cliente_nombre
         .toLowerCase()
-        .includes(search.cliente.toLowerCase());
+        .includes(newSearch.cliente.toLowerCase()); // Usamos newSearch aquí
 
       // Filtrar por fecha
-      const fechaMatch = search.fecha
-        ? element.fecha.includes(search.fecha) // Filtrar por fecha si hay valor
+      const fechaMatch = newSearch.fecha
+        ? element.fecha.includes(newSearch.fecha) // Usamos newSearch aquí
         : true;
 
       // Filtrar por estado
-      const estadoMatch = search.estado
-        ? element.estado.toLowerCase().includes(search.estado.toLowerCase())
+      const estadoMatch = newSearch.estado
+        ? element.estado.toLowerCase().includes(newSearch.estado.toLowerCase())
         : true;
 
       // Verificar que coincidan todos los filtros aplicados
       return clienteMatch && fechaMatch && estadoMatch;
     });
 
-    setFacturas(filtered);
+    setFilteredFacturas(filtered); // Aquí se actualiza el estado con las facturas filtradas
   };
 
   return (

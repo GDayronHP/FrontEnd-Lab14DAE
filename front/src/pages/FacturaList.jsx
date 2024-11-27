@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
@@ -10,7 +10,6 @@ import pdfIcon from "../assets/exportPdf.svg";
 import Search from "../components/search";
 import { motion, AnimatePresence } from "framer-motion";
 
-
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.15.349/pdf.worker.min.js";
 
@@ -20,9 +19,12 @@ const FacturaList = () => {
   const [facturas, setFacturas] = useState([]);
   const [mensaje, setMensaje] = useState("");
   const [exportationState, setExportationState] = useState(null);
-  const [showNotification, setShowNotification] = useState(false); // Estado para mostrar la notificación
-  const [notificationData, setNotificationData] = useState(null); // Datos para la notificación
-
+  const [filteredFacturas, setFilteredFacturas] = useState([]);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationData, setNotificationData] = useState(null);
+  const [file, setFile] = useState(null);
+  
+  const fileInputRef = useRef(null)
   // Obtener el token del almacenamiento local
   const token = localStorage.getItem("access");
 
@@ -51,18 +53,15 @@ const FacturaList = () => {
       try {
         const response = await FacturaService.getFacturas();
         if (response.data.length > 0) {
-          const storedFacturas =
-            JSON.parse(localStorage.getItem("importedFacturas")) || [];
-          setFacturas([...response.data, ...storedFacturas]);
-
-          // Verificar si alguna factura está a punto de vencer
+          setFacturas(response.data);
+          setFilteredFacturas(response.data); // Inicializa las facturas filtradas con todas las facturas al cargar
           response.data.forEach((factura) => {
             const fechaVencimiento = new Date(factura.fecha_vencimiento);
             const fechaActual = new Date();
             const diferencia = Math.ceil(
               (fechaVencimiento - fechaActual) / (1000 * 3600 * 24)
             );
-
+  
             if (diferencia <= 3 && diferencia > 0) {
               setShowNotification(true);
               setNotificationData(factura);
@@ -76,49 +75,64 @@ const FacturaList = () => {
         setMensaje("Hubo un error al cargar las facturas.");
       }
     };
-
+  
     if (token) {
       fetchFacturas();
     } else {
       setMensaje("No se encontró el token de acceso.");
     }
   }, [token]);
+  
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
 
   const handleImport = async (e) => {
-    e.preventDefault();
+
     if (!file) {
-      setMensaje('Por favor, selecciona un archivo.');
+      fileInputRef.current.click();
       return;
     }
-  
-    const formData = new FormData();
-    formData.append('file', file);
-  
-    try {
-      const token = localStorage.getItem('access');
-      const response = await axios.post(`http://127.0.0.1:8000/api/auth/importar-facturas-csv/?tipo=${tipo}`, formData, {
-        headers: {
-          'Authorization': `Bearer ${token}`,  // Fixed here: added backticks for proper string interpolation
-          'Content-Type': 'multipart/form-data'
+
+    // Si ya hay un archivo seleccionado, se realiza la importación
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("tipo", "cliente");
+
+      try {
+        const response = await axios.post(
+          "http://127.0.0.1:8000/api/auth/importar-facturas-csv/",
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        if (response.data.status === "success") {
+          alert("Importación exitosa");
         }
-      });
-      setMensaje('Archivo importado exitosamente.');
-    } catch (error) {
-      console.error('Error al importar el archivo:', error);
-      setMensaje('Error al importar el archivo.');
+      } catch (error) {
+        alert(
+          `Error: ${error.response ? error.response.data.message : error.message}`
+        );
+      }
     }
   };
-  
 
   const exportOneToPDF = (facturaId) => {
     // Buscar la factura correspondiente
     const factura = facturas.find((factura) => factura.id === facturaId);
-  
+
     if (!factura) {
       console.error("Factura no encontrada.");
       return;
     }
-  
+
     const doc = new jsPDF();
     doc.text("Factura Detalles", 20, 10);
     doc.autoTable({
@@ -135,17 +149,16 @@ const FacturaList = () => {
     });
     doc.save(`Factura_${factura.numero_factura}.pdf`);
   };
-  
 
   const exportOneToExcel = (facturaId) => {
     // Buscar la factura correspondiente
     const factura = facturas.find((factura) => factura.id === facturaId);
-  
+
     if (!factura) {
       console.error("Factura no encontrada.");
       return;
     }
-  
+
     const worksheet = XLSX.utils.json_to_sheet([
       {
         "Número de Factura": factura.numero_factura,
@@ -159,7 +172,6 @@ const FacturaList = () => {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Factura");
     XLSX.writeFile(workbook, `Factura_${factura.numero_factura}.xlsx`);
   };
-  
 
   // Función para exportar todas las facturas a PDF
   const exportToPDF = () => {
@@ -200,7 +212,7 @@ const FacturaList = () => {
   };
 
   return (
-    <div className="ml-[10rem] mr-[10rem] w-full p-10 sm:p-6 bg-black text-white  ">
+    <div className="h-screen ml-[10rem] mr-[10rem] w-full p-10 sm:p-6 bg-black text-white  ">
       {/* Notificación */}
       {showNotification && notificationData && (
         <AnimatePresence>
@@ -246,22 +258,24 @@ const FacturaList = () => {
         className="flex justify-between items-center mb-4"
       >
         <h1 className="text-3xl font-header font-bold">Lista de Facturas CLIENTES</h1>
-        <div className="flex space-x-2 items-center font-body text-md ">
-          <label
-            htmlFor="import-excel"
-            className="flex btn-primary cursor-pointer p-1 hover:bg-gray-50 hover:bg-opacity-15 transition-all rounded-sm border-white border-[1px] border-opacity-50 px-2 py-1"
-          >
-            <img className="pr-2 ml-1" src={importIcon}  />
-
-            <p>Importar</p>
-          </label>
+        <div className="flex space-x-2 items-center font-body text-md">
+          {/* Input de tipo file oculto */}
           <input
-            id="import-excel"
             type="file"
             accept=".csv"
-            onChange={handleImport}
-            className="hidden"
+            onChange={handleFileChange}
+            ref={fileInputRef} // Referencia al input
+            style={{ display: "none" }} // Ocultar el input
           />
+          <button
+            className="flex btn-primary cursor-pointer p-1 hover:bg-gray-50 hover:bg-opacity-15 transition-all rounded-sm border-white border-[1px] border-opacity-50 px-2 py-1"
+            onClick={handleImport} // Activar el flujo de importación
+          >
+            <img className="pr-2 ml-1" src={importIcon} />
+            Importar
+          </button>
+
+
           <button
             className="flex items-center  btn-primary bg-green-500 hover:bg-green-600 px-2 py-1 rounded-sm transition-all"
             onClick={exportToExcel}
@@ -286,7 +300,7 @@ const FacturaList = () => {
         }}
         className="flex space-x-2 my-5 w-full outline-none border-none"
       >
-        <Search elements={facturas} setFacturas={setFacturas} />
+        <Search elements={facturas} setFilteredFacturas = {setFilteredFacturas} />
       </motion.div>
       {mensaje && <p className="text-red-500">{mensaje}</p>}
       <motion.table
@@ -308,7 +322,7 @@ const FacturaList = () => {
           </tr>
         </thead>
         <tbody>
-          {facturas.map((factura, index) => (
+          {filteredFacturas.map((factura, index) => (
             <tr
               key={index}
               className="transition-all border-b border-opacity-15 border-white hover:bg-secondaryHover"
@@ -368,7 +382,7 @@ const FacturaList = () => {
                   <button
                     className="flex transition-all text-start p-1 rounded-sm hover:bg-white hover:bg-opacity-15"
                     title="Exportar como PDF"
-                    onClick={() => exportOneToPDF(factura.id, "cliente")} // Cambia 'cliente' si es necesario
+                    onClick={() => exportOneToPDF(factura.id, "cliente")}
                   >
                     <img className="mr-1" src={pdfIcon} />
                     Exportar como PDF
@@ -376,7 +390,7 @@ const FacturaList = () => {
                   <button
                     className="flex transition-all text-start p-1 rounded-sm hover:bg-white hover:bg-opacity-15"
                     title="Exportar como Excel"
-                    onClick={() => exportOneToExcel(factura.id, "cliente")} // Cambia 'cliente' si es necesario
+                    onClick={() => exportOneToExcel(factura.id, "cliente")}
                   >
                     <img className="mr-1" src={excelIcon} />
                     Exportar como Excel

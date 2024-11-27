@@ -1,6 +1,6 @@
 import axios from 'axios'; 
 
-const Gerente_BASE_REST_API_URL = "http://127.0.0.1:8000/api/auth/audit-logs/";
+const Gerente_BASE_REST_API_URL = "https://trabajofinaldjango.onrender.com/api/auth/audit-logs/";
 
 class GerenteService {
     getAuditoria() {
