@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from 'axios';
 import Cuadro from "../components/AdminComponents/Cuadro";
 import Barra from "../components/AdminComponents/Barra";
 
