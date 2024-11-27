@@ -1,7 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import Navigation from "../components/Navigation";
-import Perfil from "../components/Perfil";
+import Perfil from "../components/perfil";
 
 function MainLayout({ title, children, items }) {
   return (
