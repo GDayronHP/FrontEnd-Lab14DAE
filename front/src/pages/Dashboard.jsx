@@ -87,13 +87,6 @@ const Dashboard = () => {
             <Barra mes="Enero" cantidad="60" estilo="bg-green-500" />
             <Barra mes="Enero" cantidad="20" estilo="bg-green-500" />
             <Barra mes="Enero" cantidad="60" estilo="bg-green-500" />
-            <Barra mes="Enero" cantidad="60" estilo="bg-green-500" />
-            <Barra mes="Enero" cantidad="80" estilo="bg-green-500" />
-            <Barra mes="Enero" cantidad="60" estilo="bg-green-500" />
-            <Barra mes="Enero" cantidad="30" estilo="bg-green-500" />
-            <Barra mes="Enero" cantidad="60" estilo="bg-green-500" />
-            <Barra mes="Enero" cantidad="90" estilo="bg-green-500" />
-            <Barra mes="Enero" cantidad="60" estilo="bg-green-500" />
             {/* Puedes seguir llenando las barras aquí */}
           </div>
         </div>

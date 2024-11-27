@@ -37,7 +37,7 @@ const Login = () => {
       } else if (userRole === "contador") {
         navigate("/contador");
       } else if (userRole === "admin") {
-        navigate("/dashboard");
+        navigate("/clientes");
       } else {
         // Si el rol no es válido, puedes redirigir a una página de error o inicio
         setError("Rol no reconocido. Acceso denegado.");

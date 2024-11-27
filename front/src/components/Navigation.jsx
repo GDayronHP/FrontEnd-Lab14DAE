@@ -17,7 +17,8 @@ const Navigation = ({ items, perfil }) => {
           </li>
         ))}
       </ul>
-      {Perfil ? Perfil : ""}
+      {/* {Perfil ? Perfil : ""} */}
+      <Perfil/>
     </nav>
   );
 };

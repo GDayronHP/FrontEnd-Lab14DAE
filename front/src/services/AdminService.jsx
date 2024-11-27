@@ -1,75 +1,65 @@
-import React, { useState } from 'react';
 import axios from 'axios';
 
-const AdminService = () => {
-    const CLIENTE_BASE_REST_API_URL = "http://127.0.0.1:8000/api/auth";
-    const [fechaInicio, setFechaInicio] = useState('');
-    const [fechaFin, setFechaFin] = useState('');
-    const [resultados, setResultados] = useState(null);
-    const [mensaje, setMensaje] = useState('');
+const ADMIN_BASE_REST_API_URL = "http://127.0.0.1:8000/api/auth/";
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+class AdminService {
+    // Centraliza el manejo del token
+    getToken() {
+        return localStorage.getItem("access");
+    }
 
-        if (!fechaInicio || !fechaFin) {
-        setMensaje('Por favor, proporciona ambas fechas.');
-        return;
-        }
-
-        try {
-        const token = localStorage.getItem('access');
-        const response = await axios.get('http://127.0.0.1:8000/api/auth/proyeccion-flujo-caja/', {
-            params: {
-            fecha_inicio: fechaInicio,
-            fecha_fin: fechaFin
-            },
+    getCliente() {
+        const token = this.getToken();
+        return axios.get(ADMIN_BASE_REST_API_URL + "clientes/", {
             headers: {
-            'Authorization': `Bearer ${token}`
-            }
+                Authorization: `Bearer ${token}`,
+            },
         });
-        setResultados(response.data);
-        setMensaje('');
-        } catch (error) {
-        console.error('Error al obtener la proyecci贸n de flujo de caja:', error);
-        setMensaje('Hubo un error al obtener la proyecci贸n de flujo de caja.');
-        }
-    };
+    }
 
-    return (
-        <div>
-        <h1>Proyecci贸n de Flujo de Caja</h1>
-        {mensaje && <p>{mensaje}</p>}
-        <form onSubmit={handleSubmit}>
-            <div>
-            <label>Fecha de Inicio</label>
-            <input
-                type="date"
-                value={fechaInicio}
-                onChange={(e) => setFechaInicio(e.target.value)}
-                required
-            />
-            </div>
-            <div>
-            <label>Fecha de Fin</label>
-            <input
-                type="date"
-                value={fechaFin}
-                onChange={(e) => setFechaFin(e.target.value)}
-                required
-            />
-            </div>
-            <button type="submit">Obtener Proyecci贸n</button>
-        </form>
-        {resultados && (
-            <div>
-            <h2>Resultados</h2>
-            <p>Ingresos: {resultados.ingresos}</p>
-            <p>Egresos: {resultados.egresos}</p>
-            <p>Flujo de Caja: {resultados.flujo_caja}</p>
-            </div>
-        )}
-        </div>
-    );
-};
+    getProveedor() {
+        const token = this.getToken();
+        return axios.get(ADMIN_BASE_REST_API_URL + "proveedores/", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+    }
+    getUsuarios() {
+        const token = this.getToken();
+        return axios.get(`${ADMIN_BASE_REST_API_URL}admin/usuarios/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
 
-export default Prueba;
+      crearUsuario(usuarioData) {
+        const token = this.getToken();
+        return axios.post(`${ADMIN_BASE_REST_API_URL}admin/usuarios/`, usuarioData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+      actualizarUsuario(id, usuarioData) {
+        const token = this.getToken();
+        return axios.put(`${ADMIN_BASE_REST_API_URL}admin/usuarios/${id}/`, usuarioData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+      eliminarUsuario(id) {
+        const token = this.getToken();
+        return axios.delete(`${ADMIN_BASE_REST_API_URL}admin/usuarios/${id}/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+      
+
+}
+
+export default new AdminService();

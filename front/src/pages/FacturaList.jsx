@@ -208,7 +208,7 @@ const FacturaList = () => {
   };
 
   return (
-    <div className="ml-[10rem] mr-[10rem] w-full p-10 sm:p-6 bg-black text-white  ">
+    <div className="ml-[10rem] p-10 sm:p-6 bg-black text-white  ">
       {/* Notificación */}
       {showNotification && notificationData && (
         <AnimatePresence>

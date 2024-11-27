@@ -108,7 +108,7 @@ const FacturaListaProveedor = () => {
   };
 
   return (
-    <div className="ml-[10rem] mr-[10rem] w-full p-10 sm:p-6 bg-black text-white h-screen">
+    <div className="ml-[10rem]  p-10 sm:p-6 bg-black text-white h-screen">
       {/* Exportación de archivos */}
       <motion.div
         initial={{ opacity: 0, x: -50 }}

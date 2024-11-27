@@ -17,6 +17,15 @@ class DashboardService {
         });
     }
 
+    getTotalProveedoresCobrar() {
+        const token = this.getToken();
+        return axios.get(ADMIN_BASE_REST_API_URL + "total-por-cobrar/", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+    }
+
     getTotalClientesPagar() {
         const token = this.getToken();
         return axios.get(ADMIN_BASE_REST_API_URL + "total-por-pagar/", {
@@ -33,6 +42,7 @@ class DashboardService {
             },
         });
     }
+
 }
 
 export default new DashboardService();
