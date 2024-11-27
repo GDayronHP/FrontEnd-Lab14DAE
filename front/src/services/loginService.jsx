@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const CLIENTE_BASE_REST_API_URL = "https://trabajofinaldjango.onrender.com/api/auth/";
+const CLIENTE_BASE_REST_API_URL = "https://trabajofinaldjango.onrender.com/api/auth";
 
 class LoginService {
   verifyLogin(email, password) {

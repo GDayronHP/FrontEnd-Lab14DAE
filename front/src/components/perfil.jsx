@@ -1,13 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Importar useNavigate
+import axios from 'axios'; // Importar axios
 
 function Perfil() {
   // Estado para controlar la visibilidad del menú
   const [menuVisible, setMenuVisible] = useState(false);
-  
+
   // Referencia para el div del perfil (segundo div)
   const perfilRef = useRef(null);
-  
+  const menuRef = useRef(null); // Referencia para el menú
+
   // Función para alternar la visibilidad del menú
   const toggleMenu = () => {
     setMenuVisible(prevState => !prevState);
@@ -15,25 +17,10 @@ function Perfil() {
 
   // Función para cerrar el menú si se hace clic fuera de él
   const handleClickOutside = (event) => {
-    if (perfilRef.current && !perfilRef.current.contains(event.target)) {
-      setMenuVisible(false);
+    if (perfilRef.current && !perfilRef.current.contains(event.target) &&
+        menuRef.current && !menuRef.current.contains(event.target)) {
+      setMenuVisible(false); // Cerrar el menú si se hace clic fuera de los dos
     }
-  };
-
-  // Redirigir al usuario
-  const navigate = useNavigate();
-
-  // Función de logout (eliminar token y redirigir)
-  const handleLogout = () => {
-    // Eliminar el token del localStorage (o sessionStorage, dependiendo de tu implementación)
-    localStorage.removeItem('token'); // Si usas localStorage
-    // sessionStorage.removeItem('token'); // Si usas sessionStorage
-
-    // También puedes eliminar otro tipo de información como el historial de usuario, si es necesario
-    localStorage.removeItem('user'); // Ejemplo de eliminar datos del usuario
-
-    // Redirigir a la página principal o inicio
-    navigate('/');
   };
 
   useEffect(() => {
@@ -43,6 +30,25 @@ function Perfil() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  // Redirigir al usuario a la página de login y limpiar la sesión
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      // Realizar la solicitud POST para cerrar la sesión en el backend
+      await axios.post("http://127.0.0.1:8000/api/auth/logout/");
+
+      // Eliminar los datos de la sesión (token y usuario) del localStorage
+      localStorage.removeItem("access");
+      localStorage.removeItem("user");
+
+      // Redirigir a la página de login (ruta que corresponde a "/")
+      navigate("/");  // Redirige a la página de login
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
+  };
 
   return (
     <div className='text-white w-full h-28 bg-transparent flex justify-center items-center'>
@@ -58,6 +64,7 @@ function Perfil() {
       {/* Menú pequeño que aparece cuando menuVisible es true */}
       {menuVisible && (
         <div
+          ref={menuRef}
           className='absolute left-full ml-4 bottom-20 bg-primary hover:bg-primaryHover text-white p-4 rounded-lg shadow-lg'
         >
           <ul>
@@ -65,13 +72,16 @@ function Perfil() {
               <a href='/configurar' className='hover:text-slate-300'>Configurar</a>
             </li>
             <li>
-              <a
-                href='/salir'
+              <button
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevenir que se cierre el menú
+                  handleLogout(); // Ejecutar el logout
+                }}
                 className='hover:text-slate-300'
-                onClick={handleLogout} // Llamar a la función de logout al hacer clic
+                onMouseDown={(e) => e.preventDefault()} // Evitar que toggleMenu se ejecute
               >
                 Salir
-              </a>
+              </button>
             </li>
           </ul>
         </div>

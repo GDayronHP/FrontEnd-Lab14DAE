@@ -11,6 +11,10 @@ import ChatPage from "./pages/ChatPage";
 import FacturaProveedorForm from "./pages/facturaProveedor";
 import Prueba from "./pages/prueba";
 import FacturaListProveedor from "./pages/FacturaListaProveedor";
+import ClienteList from "./pages/ClienteList";
+import ProveedorList from "./pages/ProveedorList";
+import UsuarioList from "./pages/UsuarioLista";
+import UsuarioForm from "./pages/UsuarioForm";
 
 const contadorItems = [
   { name: "Inicio", path: "/contador" },
@@ -22,6 +26,15 @@ const contadorItems = [
   { name: "Prueba", path: "/prueba" },
   { name: "Dashboard", path: "/dashboard" },
   { name: "Lista de factura proveedor", path: "/factura-List-proveedor" },
+];
+
+const adminItems = [
+  { name: "Cliente", path: "/clientes" },
+  { name: "Proveedor", path: "/proveedor" },
+  { name: "Facturas cliente", path: "/facturas-cliente" },
+  { name: "Facturas proveedor", path: "/facturas-proveedor" },
+  { name: "Usuarios", path: "/usuarios" },
+  { name: "UsuarioForm", path: "/UsuarioForm" },
 ];
 
 function App() {
@@ -71,7 +84,7 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            <MainLayout title="dashboard" items={contadorItems}>
+            <MainLayout title="Dashboard" items={contadorItems}>
               <Dashboard />
             </MainLayout>
           }
@@ -104,7 +117,7 @@ function App() {
           path="/factura-List-proveedor"
           element={
             <MainLayout title="Lista de factura proveedor" items={contadorItems}>
-              <FacturaListProveedor/>
+              <FacturaListProveedor />
             </MainLayout>
           }
         />
@@ -113,6 +126,54 @@ function App() {
           element={
             <MainLayout title="Pruebas" items={contadorItems}>
               <Prueba />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/clientes"
+          element={
+            <MainLayout title="Clientes" items={adminItems}>
+              <ClienteList />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/proveedor"
+          element={
+            <MainLayout title="Proveedor" items={adminItems}>
+              <ProveedorList />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/facturas-cliente"
+          element={
+            <MainLayout title="Factura cliente" items={adminItems}>
+              <FacturaList />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/facturas-proveedor"
+          element={
+            <MainLayout title="Factura proveedor" items={adminItems}>
+              <FacturaListProveedor />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/usuarios"
+          element={
+            <MainLayout title="Lista de usarios" items={adminItems}>
+              <UsuarioList />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/UsuarioForm"
+          element={
+            <MainLayout title="Crear un usario" items={adminItems}>
+              <UsuarioForm />
             </MainLayout>
           }
         />
